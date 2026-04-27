@@ -1,4 +1,5 @@
 import com.packages.arrays.*;
+import com.packages.game.TriquiTaller;
 import com.packages.linked_list.*;
 import com.packages.strings.*;
 import java.util.Scanner;
@@ -17,6 +18,8 @@ public class Main
             System.out.println("3. Matrices");
             System.out.println("4. Registros");
             System.out.println("5. Lista Simplemente Ligada");
+            System.out.println("6. Lista Simplemente Ligada Taller 1");
+            System.out.println("7. Juego Triqui");
             System.out.print("Ingrese su opción: ");
             resp = input.nextLine();
 
@@ -38,6 +41,12 @@ public class Main
                     break;
                 case "5":
                     menuLSL();
+                    break;
+                case "6":
+                    menuLSLTaller();
+                    break;
+                case "7":
+                    menuTriqui();
                     break;
                 default:
                     System.out.println("Opción no válida");
@@ -651,6 +660,392 @@ public class Main
             }
         } while (!resp.equals("0"));
     }
-    
-    
+
+    public static void menuLSLTaller()
+    {
+        String resp;
+        int coeficiente, exponente;
+        LSLTaller f = new LSLTaller();
+        LSLTaller g = new LSLTaller();
+        do {
+            System.out.println("\n-------Menú LSL Taller------");
+            System.out.println("0. Regresar");
+            System.out.println("1. Crear polinomio f(x): ");
+            System.out.println("2. Crear polinomio g(x): ");
+            System.out.println("3. Mostrar polinomios: ");
+            System.out.println("4. Ordenar polinomios: ");
+            System.out.println("5. Modificar término: ");
+            System.out.println("6. Eliminar término: ");
+            System.out.println("7. Añadir término: ");
+            System.out.println("8. Sumar polinomios: ");
+            System.out.println("9. Restar polinomios: ");
+            System.out.println("10. Calcular f(a) y g(a): ");
+
+            System.out.print("Ingrese su opción: ");
+            resp = input.nextLine();
+            
+            String opcionPolinomio;
+            switch (resp) {
+                case "0":
+                    break;
+                case "1":
+                    System.out.print("Coeficiente: ");
+                    coeficiente = input.nextInt();
+                    input.nextLine();
+
+                    System.out.print("Exponente: ");
+                    exponente = input.nextInt();
+                    input.nextLine();
+
+                    f.createBeginLSL(coeficiente, exponente);
+                    break;
+
+                case "2":
+                    System.out.print("Coeficiente: ");
+                    coeficiente = input.nextInt();
+                    input.nextLine();
+
+                    System.out.print("Exponente: ");
+                    exponente = input.nextInt();
+                    input.nextLine();
+
+                    g.createBeginLSL(coeficiente, exponente);
+                    break;
+
+                case "3":
+                    System.out.print("f(x) = ");
+                    f.showLSLTaller();
+
+                    System.out.print("g(x) = ");
+                    g.showLSLTaller();
+                    break;
+
+                case "4":
+                    if (f.getHead() == null && g.getHead() == null) {
+                        System.out.println("No hay polinomios creados para ordenar.");
+                    } else {
+                        if (f.getHead() != null) {
+                            f.organizeLSLTaller();
+                        }
+
+                        if (g.getHead() != null) {
+                            g.organizeLSLTaller();
+                        }
+
+                        System.out.println("Polinomios ordenados correctamente.");
+
+                        System.out.print("f(x) = ");
+                        f.showLSLTaller();
+
+                        System.out.print("g(x) = ");
+                        g.showLSLTaller();
+                    }
+                    break;
+                case "5":
+                    System.out.println("¿Qué polinomio desea modificar?");
+                    System.out.println("1. f(x)");
+                    System.out.println("2. g(x)");
+                    System.out.print("Ingrese una opción: ");
+                    opcionPolinomio = input.nextLine();
+
+                    LSLTaller polinomioSeleccionado = null;
+
+                    if (opcionPolinomio.equals("1")) {
+                        polinomioSeleccionado = f;
+                    } else if (opcionPolinomio.equals("2")) {
+                        polinomioSeleccionado = g;
+                    } else {
+                        System.out.println("Opción no válida");
+                        break;
+                    }
+
+                    if (polinomioSeleccionado.getHead() == null) {
+                        System.out.println("El polinomio está vacío. No hay términos para modificar.");
+                        break;
+                    }
+
+                    System.out.print("Ingrese el exponente a modificar: ");
+                    exponente = input.nextInt();
+                    input.nextLine();
+
+                    NodeTaller termino = polinomioSeleccionado.findExponentLSL(exponente);
+                    if (termino == null) {
+                        System.out.println("El exponente " + exponente + " no se encuentra en el polinomio");
+                        break;
+                    }
+
+                    System.out.print("Ingrese el nuevo coeficiente: ");
+                    coeficiente = input.nextInt();
+                    input.nextLine();
+
+                    polinomioSeleccionado.modifyPolinomio(coeficiente, exponente);
+                    break;
+                case "6":
+                    System.out.println("¿De qué polinomio desea eliminar un término?");
+                    System.out.println("1. f(x)");
+                    System.out.println("2. g(x)");
+                    System.out.print("Ingrese una opción: ");
+                    opcionPolinomio = input.nextLine();
+
+                    LSLTaller polinomioEliminar = null;
+
+                    if (opcionPolinomio.equals("1")) {
+                        polinomioEliminar = f;
+                    } else if (opcionPolinomio.equals("2")) {
+                        polinomioEliminar = g;
+                    } else {
+                        System.out.println("Opción no válida");
+                        break;
+                    }
+
+                    if (polinomioEliminar.getHead() == null) {
+                        System.out.println("El polinomio está vacío. No hay términos para eliminar.");
+                        break;
+                    }
+
+                    System.out.print("Ingrese el exponente del término a eliminar: ");
+                    exponente = input.nextInt();
+                    input.nextLine();
+
+                    NodeTaller terminoEliminar = polinomioEliminar.findExponentLSL(exponente);
+                    if (terminoEliminar == null) {
+                        System.out.println("El exponente " + exponente + " no se encuentra en el polinomio");
+                        break;
+                    }
+                    polinomioEliminar.deletePolinomio(exponente);
+                    break;       
+                case "7":
+                    System.out.println("¿A qué polinomio desea añadir un término?");
+                    System.out.println("1. f(x)");
+                    System.out.println("2. g(x)");
+                    System.out.println("Ingrese una opción: ");
+                    opcionPolinomio = input.nextLine();
+
+                    LSLTaller polinomioAgregar = null;
+
+                    if (opcionPolinomio.equalsIgnoreCase("1")) {
+                        polinomioAgregar = f;
+                    } else if (opcionPolinomio.equals("2"))
+                        polinomioAgregar = g;
+                    else {
+                        System.out.println("Opción no válida");
+                        break;
+                    }
+
+                    System.out.print("Ingrese el coeficiente del nuevo término: ");
+                    coeficiente = input.nextInt();
+                    input.nextLine();
+
+                    System.out.print("Ingrese el exponente del nuevo término: ");
+                    exponente = input.nextInt();
+                    input.nextLine();
+
+                    polinomioAgregar.addTermOrdered(coeficiente, exponente);
+                    System.out.println("Término agregado conservando el orden.");
+                    break;
+                case "8":
+                    if (f.getHead() == null && g.getHead() == null) {
+                        System.out.println("No hay polinomios creados para sumar.");
+                    } else {
+                        LSLTaller suma = f.addPolinomios(g);
+
+                        System.out.print("f(x) = ");
+                        f.showLSLTaller();
+
+                        System.out.print("g(x) = ");
+                        g.showLSLTaller();
+
+                        System.out.print("Suma f(x) + g(x) = ");
+                        suma.showLSLTaller();
+                    }
+                    break;
+                case "9":
+                    if (f.getHead() == null && g.getHead() == null) {
+                        System.out.println("No hay polinomios creados para restar.");
+                    } else {
+                        LSLTaller resta = f.subtractPolinomios(g);
+
+                        System.out.print("f(x) = ");
+                        f.showLSLTaller();
+
+                        System.out.print("g(x) = ");
+                        g.showLSLTaller();
+
+                        System.out.print("Resta f(x) - g(x) = ");
+                        resta.showLSLTaller();
+                    }      
+                    break;                                                          
+                case "10":
+                    if (f.getHead() == null && g.getHead() == null) {
+                        System.out.println("No hay polinomios creados para evaluar.");
+                    } else {
+                        System.out.print("Ingrese el valor de a: ");
+                        int a = input.nextInt();
+                        input.nextLine();
+
+                        if (f.getHead() != null) {
+                            System.out.println("f(" + a + ") = " + f.evaluatePolinomio(a));
+                        } else {
+                            System.out.println("f(x) No ha sido creado.");
+                        }
+
+                        if (g.getHead() != null) {
+                            System.out.println("g(" + a + ") = " + g.evaluatePolinomio(a));
+                        } else {
+                            System.out.println("g(x) No ha sido creado.");
+                        }
+                    }
+                    break;
+                default:
+                    System.out.println("Opción no válida");
+                    break;
+            }
+        } while (!resp.equals("0"));
+    }
+
+    public static void menuTriqui(){
+        String resp;
+        String jugador1, jugador2;
+        char simbolo1, simbolo2;
+
+        TriquiTaller juego = new TriquiTaller();
+
+        do {
+            System.out.println("\n-------Menú Triqui Taller------");
+            System.out.println("0. Regresar: ");
+            System.out.println("1. Ingresar usuarios: ");
+            System.out.println("2. Sortear inicio: ");
+            System.out.println("3. Mostrar estado del juego: ");
+            System.out.println("4. Modificar nombres: ");
+            System.out.println("5. Jugar turno: ");
+            System.out.println("6. Cancelar juego: ");
+            System.out.println("7. Pausar juego: ");
+            System.out.println("8. Reanudar juego: ");
+            System.out.print("Ingrese su opción: ");
+            resp = input.nextLine();
+
+            switch (resp) {
+                case "0":
+                    break;
+
+                case "1":
+                    System.out.print("Ingrese nombre del jugador 1: ");
+                    jugador1 = input.nextLine();
+
+                    System.out.print("Ingrese símbolo del jugador 1: ");
+                    simbolo1 = input.nextLine().charAt(0);
+
+                    System.out.print("Ingrese nombre del jugador 2: ");
+                    jugador2 = input.nextLine();
+
+                    do {
+                        System.out.print("Ingrese símbolo del jugador 2: ");
+                        simbolo2 = input.nextLine().charAt(0);
+
+                        if (simbolo1 == simbolo2) {
+                            System.out.println("Los símbolos no pueden ser iguales. Por favor, ingrese un símbolo diferente para el jugador 2.");
+                        }
+
+                    } while (simbolo2 == simbolo1);
+
+                    juego.ingresarUsuarios(jugador1, simbolo1, jugador2, simbolo2);
+                    break;
+
+                case "2":
+                    juego.sortearInicio();
+                    break;
+
+                case "3":
+                    juego.mostrarEstadoJuego();
+                    break;
+
+                case "4":
+                    if (!juego.triqui.usuariosIngresados) {
+                        System.out.println("Primero debe ingresar los usuarios.");
+                        break;
+                    }
+
+                    System.out.println("¿Qué jugador desea modificar?");
+                    System.out.println("1. Jugador 1: " + juego.triqui.jugador1);
+                    System.out.println("2. Jugador 2: " + juego.triqui.jugador2);
+                    System.out.print("Ingrese una opcion: ");
+                    int numeroJugador = input.nextInt();
+                    input.nextLine();
+
+                    System.out.print("Ingrese el nuevo nombre del jugador " + numeroJugador + ": ");
+                    String nuevoNombre = input.nextLine();
+
+                    char nuevoSimbolo;
+
+                    do {
+                        System.out.print("Ingrese el nuevo símbolo del jugador " + numeroJugador + ": ");
+                        nuevoSimbolo = input.nextLine().charAt(0);
+
+                        if (numeroJugador == 1 && nuevoSimbolo == juego.triqui.simbolo2) {
+                            System.out.println("El símbolo no puede ser igual al del jugador 2. Por favor, ingrese un símbolo diferente.");
+                        } else if (numeroJugador ==2 && nuevoSimbolo == juego.triqui.simbolo1) {
+                            System.out.println("El símbolo no puede ser igual al del jugador 1. Por favor, ingrese un símbolo diferente.");
+                        }
+
+                    } while ((numeroJugador == 1 && nuevoSimbolo == juego.triqui.simbolo2) || (numeroJugador == 2 && nuevoSimbolo == juego.triqui.simbolo1));
+
+                    juego.modificarNombres(numeroJugador, nuevoNombre, nuevoSimbolo);
+                    
+                    break;
+
+                case "5":
+                    if (!juego.triqui.usuariosIngresados) {
+                        System.out.println("Primero debe ingresar los usuarios.");
+                        break;
+                    } else if (!juego.triqui.juegoIniciado) {
+                        System.out.println("Primero debe realizar el sorteo de inicio.");
+                        break;
+                    } else if (juego.triqui.juegoPausado) {
+                        System.out.println("El juego está pausado.");
+                        break;
+                    }
+
+                    int fila, columna;
+
+                        do {
+                        System.out.print("Ingrese la fila (0-2): ");
+                        fila = input.nextInt();
+                        input.nextLine();
+
+                        System.out.print("Ingrese la columna (0-2): ");
+                        columna = input.nextInt();
+                        input.nextLine();
+
+                        if (fila < 0 || fila > 2 || columna < 0 || columna > 2) {
+                            System.out.println("Coordenada inválida. Intente de nuevo.");
+                        } else if (juego.triqui.tablero[fila][columna] != ' ') {
+                            System.out.println("Esa casilla ya está ocupada. Intente de nuevo.");
+                        }
+
+                    } while ((fila < 0 || fila > 2 || columna < 0 || columna > 2) ||
+                            juego.triqui.tablero[fila][columna] != ' ');
+                            
+                    juego.jugarTurno(fila, columna);
+                    break;
+
+                case "6":
+                    juego.cancelarJuego();
+                    break;
+
+                case "7":
+                    juego.pausarJuego();
+                    break;
+
+                case "8":
+                    juego.reanudarJuego();
+                    break;
+
+                default:
+                    System.out.println("Opción no válida");
+                    break;
+            }
+
+        } while (!resp.equals("0"));
+    }
+
 }
