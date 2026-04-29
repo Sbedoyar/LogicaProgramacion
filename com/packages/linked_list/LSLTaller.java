@@ -1,6 +1,5 @@
 package com.packages.linked_list;
 
-import org.w3c.dom.Node;
 
 public class LSLTaller {
 
@@ -131,14 +130,14 @@ public class LSLTaller {
 
     //Modifica el coeficiente de un término dado su exponente. 
     //Si el exponente no existe, muestra un mensaje indicando que no se encontró el término.
-    public void modifyPolinomio(int coeficiente, int nuevoExponente){
-        NodeTaller r = findExponentLSL(nuevoExponente);
+    public void modifyPolinomio(int nuevoCoeficiente, int exponente){
+        NodeTaller r = findExponentLSL(exponente);
 
         if (r != null) {
-            r.coeficiente = coeficiente;
+            r.coeficiente = nuevoCoeficiente;
             System.out.println("Término modificado correctamente");
         } else {
-            System.out.println("El exponente " + nuevoExponente + " no existe en el polinomio");
+            System.out.println("El exponente " + exponente + " no existe en el polinomio");
         }
     }
 
