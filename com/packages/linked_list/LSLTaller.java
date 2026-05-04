@@ -20,37 +20,29 @@ public class LSLTaller {
     //Funciona para buscar si un exponente ya está dentro del polinomio.
     //Si encuentro el exponente, guardo ese nodo en q.
     //Si nunca lo encuentro, q se queda en null.
-    public NodeTaller findExponentLSL(int exponente){
+    public NodeTaller findExponentLSL(int exponente) {
         NodeTaller p = head;
-        NodeTaller q = null;
-        boolean sw = false; //Todavia no se ha encontrado
 
-        while (p != null && !sw) {
+        while (p != null) {
             if (p.exponente == exponente) {
-                sw = true;
-                q = p;
-            } else {
-                p = p.link; //Esto es para que vaya al otro nodo
+                return p;
             }
+
+            p = p.link;
         }
-        return q; //Si encuentra el valor devuelve q, sino, devuelve null (q es la direccion del nodo)
+
+        return null;
     }
 
     public void createBeginLSL(int coeficiente, int exponente){
 
         //Pendiente preguntar al profe estas validaciones extra
-        if (exponente < 0) {
-            System.out.println("El exponente no puede ser negativo");
-            return;
-        }
-
         if (coeficiente == 0) {
             System.out.println("El coeficiente no puede ser cero");
             return;
         }
 
-        NodeTaller r = findExponentLSL(exponente); //r es una variable auxiliar que guardará
-                                                   //la información del metodo. (Dirección)
+        NodeTaller r = findExponentLSL(exponente); //r guarda la dirección del nodo encontrado
 
         if (r == null) {
             NodeTaller p = new NodeTaller(); //Se crea un nuevo nodo, como un nodo auxiliar
@@ -100,49 +92,56 @@ public class LSLTaller {
 
     //Organiza el polinomio de mayor a menor exponente.
     public void organizeLSLTaller(){
-        NodeTaller p; // Variable auxiliar para recorrer la lista
-        boolean sw = true; //variable de control para el ordenamiento, inicialmente se asume que no está ordenada
+        NodeTaller p; // Variable auxiliar para recorrer la lista.
+        boolean sw = true; // Bandera que permite repetir el recorrido mientras haya intercambios.
 
-        if (head != null) { //Si la lista no está vacía, se procede a ordenar
+        if (head != null) { // Si la lista no está vacía, se procede a ordenar.
             while (sw) {
-                sw = false; // Se asume que la lista está ordenada, si se realiza un intercambio, se marcará como no ordenada
-                p = head;
+                sw = false; // Se asume que ya está ordenada. Si hay intercambio, cambia a true.
+                p = head; // En cada pasada se vuelve a empezar desde la cabeza.
 
-                while (p != null && p.link != null) {
-                    if (p.exponente < p.link.exponente) {
-                        int auxCoeficiente = p.coeficiente;
-                        int auxExponente = p.exponente;
+                while (p != null && p.link != null) { // Recorre mientras exista un nodo siguiente para comparar.
+                    if (p.exponente < p.link.exponente) { // Si el actual tiene menor exponente que el siguiente, se intercambian.
+                        
+                        int auxCoeficiente = p.coeficiente; // Guarda temporalmente el coeficiente actual.
+                        int auxExponente = p.exponente; // Guarda temporalmente el exponente actual.
 
-                        p.coeficiente = p.link.coeficiente;
-                        p.exponente = p.link.exponente;
+                        p.coeficiente = p.link.coeficiente; // Pasa el coeficiente del siguiente al nodo actual.
+                        p.exponente = p.link.exponente; // Pasa el exponente del siguiente al nodo actual.
 
-                        p.link.coeficiente = auxCoeficiente;
-                        p.link.exponente = auxExponente;
+                        p.link.coeficiente = auxCoeficiente; // Pasa el coeficiente guardado al siguiente nodo.
+                        p.link.exponente = auxExponente; // Pasa el exponente guardado al siguiente nodo.
 
-                        sw = true; // Si se realizó un intercambio, se marca que la lista aún no está ordenada
+                        sw = true; // Como hubo intercambio, se debe hacer otra pasada.
                     }
 
-                    p = p.link;
+                    p = p.link; // Avanza al siguiente nodo.
                 }
             }
         }
     }
-
     //Modifica el coeficiente de un término dado su exponente. 
     //Si el exponente no existe, muestra un mensaje indicando que no se encontró el término.
     public void modifyPolinomio(int nuevoCoeficiente, int exponente){
         NodeTaller r = findExponentLSL(exponente);
 
         if (r != null) {
-            r.coeficiente = nuevoCoeficiente;
-            System.out.println("Término modificado correctamente");
+
+            if (nuevoCoeficiente == 0) {
+                deletePolinomio(exponente);
+                System.out.println("El coeficiente quedó en cero, por eso el término fue eliminado.");
+            } else {
+                r.coeficiente = nuevoCoeficiente;
+                System.out.println("Término modificado correctamente");
+            }
+
         } else {
             System.out.println("El exponente " + exponente + " no existe en el polinomio");
         }
     }
 
     //Elimina un término del polinomio dado su exponente.
-    public void deletePolinomio(int exponente){
+    public boolean deletePolinomio(int exponente) {
         NodeTaller p = head;
         NodeTaller q = null;
         boolean sw = false;
@@ -157,23 +156,30 @@ public class LSLTaller {
         }
 
         if (sw) {
-            if (q == null) { // El nodo a eliminar es la cabeza
+            if (q == null) {
                 head = p.link;
-            } else { // El nodo a eliminar no es la cabeza
+            } else {
                 q.link = p.link;
             }
-            System.out.println("Término eliminado correctamente");
-        } else {
-            System.out.println("El exponente " + exponente + " no existe en el polinomio");
+
+            return true;
         }
+
+        return false;
     }
 
 
     public void addTermOrdered(int coeficiente, int exponente) {
+
+        if (coeficiente == 0) {
+            System.out.println("El coeficiente no puede ser cero");
+            return;
+        }
+
         NodeTaller r = findExponentLSL(exponente);
 
         if (r != null) {
-            System.out.println("El exponente" + exponente + " ya existe en el polinomio");
+            System.out.println("El exponente " + exponente + " ya existe en el polinomio");
             return;
         }
 

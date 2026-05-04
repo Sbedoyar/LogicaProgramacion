@@ -807,18 +807,19 @@ public class Main
                     exponente = input.nextInt();
                     input.nextLine();
 
-                    NodeTaller terminoEliminar = polinomioEliminar.findExponentLSL(exponente);
-                    if (terminoEliminar == null) {
-                        System.out.println("El exponente " + exponente + " no se encuentra en el polinomio");
-                        break;
+                    boolean eliminado = polinomioEliminar.deletePolinomio(exponente);
+
+                    if (eliminado) {
+                        System.out.println("Término eliminado correctamente.");
+                    } else {
+                        System.out.println("El exponente " + exponente + " no se encuentra en el polinomio.");
                     }
-                    polinomioEliminar.deletePolinomio(exponente);
                     break;       
                 case "7":
                     System.out.println("¿A qué polinomio desea añadir un término?");
                     System.out.println("1. f(x)");
                     System.out.println("2. g(x)");
-                    System.out.println("Ingrese una opción: ");
+                    System.out.print("Ingrese una opción: ");
                     opcionPolinomio = input.nextLine();
 
                     LSLTaller polinomioAgregar = null;
@@ -964,13 +965,18 @@ public class Main
                         System.out.println("Primero debe ingresar los usuarios.");
                         break;
                     }
-
+                    System.out.println();
                     System.out.println("¿Qué jugador desea modificar?");
                     System.out.println("1. Jugador 1: " + juego.triqui.jugador1);
                     System.out.println("2. Jugador 2: " + juego.triqui.jugador2);
                     System.out.print("Ingrese una opcion: ");
                     int numeroJugador = input.nextInt();
                     input.nextLine();
+
+                    if (numeroJugador != 1 && numeroJugador != 2) {
+                        System.out.println("Número de jugador inválido. Debe ser 1 o 2.");
+                        break;
+                    }
 
                     System.out.print("Ingrese el nuevo nombre del jugador " + numeroJugador + ": ");
                     String nuevoNombre = input.nextLine();

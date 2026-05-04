@@ -106,38 +106,21 @@ public class TriquiTaller {
     }
 
     //Punto d.
-    public void modificarNombres(int numeroJugador, String nuevoNombre, char nuevoSimbolo) {
-        if (!triqui.usuariosIngresados) {
-            System.out.println("Primero debe ingresar los usuarios.");
-            return;
-        }
-
-        if (numeroJugador == 1) {
-            if (nuevoSimbolo == triqui.simbolo2) {
-                System.out.println("El símbolo no puede ser igual al del jugador 2. Por favor, elija un símbolo diferente.");
-                return;
+        public void modificarNombres(int numeroJugador, String nuevoNombre, char nuevoSimbolo) {
+            if (!triqui.usuariosIngresados) {
+                System.out.println("Primero debe ingresar los usuarios.");
+            } else if (numeroJugador == 1) {
+                triqui.jugador1 = nuevoNombre;
+                triqui.simbolo1 = nuevoSimbolo;
+                System.out.println("Jugador 1 actualizado correctamente.");
+            } else if (numeroJugador == 2) {
+                triqui.jugador2 = nuevoNombre;
+                triqui.simbolo2 = nuevoSimbolo;
+                System.out.println("Jugador 2 actualizado correctamente.");
+            } else {
+                System.out.println("Número de jugador inválido. Debe ser 1 o 2.");
             }
-            triqui.jugador1 = nuevoNombre;
-            triqui.simbolo1 = nuevoSimbolo;
-
-            System.out.println("Nombre y símbolo del jugador 1 actualizados correctamente.");
-
-        } else if (numeroJugador == 2) {
-            if (nuevoSimbolo == triqui.simbolo1) {
-                System.out.println("El símbolo no puede ser igual al del jugador 1. Por favor, elija un símbolo diferente.");
-                return;
-            }
-            
-            triqui.jugador2 = nuevoNombre;
-            triqui.simbolo2 = nuevoSimbolo;
-
-            System.out.println("Nombre y símbolo del jugador 2 actualizados correctamente.");
-
-        } else {
-            System.out.println("Número de jugador inválido. Debe ser 1 o 2.");
         }
-        System.out.println("Nombres de jugadores actualizados correctamente.");
-    }
 
     //punto e.
     public void jugarTurno(int fila, int columna) {
@@ -152,6 +135,12 @@ public class TriquiTaller {
                 triqui.juegoIniciado = false;
                 return; 
             }
+
+            if (verificarEmpate()) {
+                System.out.println("¡El juego ha terminado en empate!");
+                triqui.juegoIniciado = false;
+                return;
+            }
             
             triqui.turnoActual = 2;
 
@@ -165,6 +154,13 @@ public class TriquiTaller {
                 triqui.juegoIniciado = false;
                 return; 
             }
+
+            if (verificarEmpate()) {
+                System.out.println("¡El juego ha terminado en empate!");
+                triqui.juegoIniciado = false;
+                return;
+            }
+
             triqui.turnoActual = 1;
         }
         mostrarEstadoJuego();
@@ -253,5 +249,18 @@ public class TriquiTaller {
         System.out.println("   "+s+"      "+s+"  "+s+"    "+s+s+s+s+s+"   "+s+s+s+s+s+"   "+s+s+s+s+s+"   "+s+s+s+s+s);
 
         System.out.println("\n¡Felicitaciones " + nombre + ", ganaste la partida!");
+    }
+
+
+    //Extra: Método para verificar si el tablero está lleno (empate)
+    public boolean verificarEmpate() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (triqui.tablero[i][j] == ' ') {
+                    return false; // Aún hay espacios vacíos, no es empate
+                }
+            }
+        }
+        return true; // El tablero está lleno, es empate
     }
 }
