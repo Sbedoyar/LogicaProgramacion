@@ -42,6 +42,11 @@ public class LSLTaller {
             return;
         }
 
+        if (exponente < 0) {
+            System.out.println("El exponente no puede ser negativo en un polinomio");
+            return;
+        }
+
         NodeTaller r = findExponentLSL(exponente); //r guarda la dirección del nodo encontrado
 
         if (r == null) {
@@ -169,18 +174,23 @@ public class LSLTaller {
     }
 
 
-    public void addTermOrdered(int coeficiente, int exponente) {
+    public boolean addTermOrdered(int coeficiente, int exponente) {
 
         if (coeficiente == 0) {
             System.out.println("El coeficiente no puede ser cero");
-            return;
+            return false;
+        }
+
+        if (exponente < 0) {
+            System.out.println("El exponente no puede ser negativo en un polinomio");
+            return false;
         }
 
         NodeTaller r = findExponentLSL(exponente);
 
         if (r != null) {
             System.out.println("El exponente " + exponente + " ya existe en el polinomio");
-            return;
+            return false;
         }
 
         NodeTaller p = new NodeTaller();
@@ -197,9 +207,12 @@ public class LSLTaller {
             while (q.link != null && q.link.exponente > exponente) {
                 q = q.link;
             }
+
             p.link = q.link;
             q.link = p;
         }
+
+        return true;
     }
                 
     public LSLTaller addPolinomios(LSLTaller g){

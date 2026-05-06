@@ -22,6 +22,12 @@ public class TriquiTaller {
     //Punto a.
     public void ingresarUsuarios(String jugador1, char simbolo1, String jugador2, char simbolo2) {
 
+
+        if (jugador1.equalsIgnoreCase(jugador2)) {
+            System.out.println("Los jugadores no pueden tener el mismo nombre.");
+            return;
+        }
+
         if (simbolo1 == simbolo2) {
             System.out.println("Los símbolos no pueden ser iguales.");
             return;
@@ -33,10 +39,10 @@ public class TriquiTaller {
         triqui.simbolo1 = simbolo1;
         triqui.simbolo2 = simbolo2;
 
-        triqui.usuariosIngresados = true; //Se marcan los usuarios como ingresados
-        triqui.juegoIniciado = false; // Se inicia el juego después de ingresar los usuarios
-        triqui.juegoPausado = false; // Se asegura de que el juego no esté pausado al ingresar los usuarios
-        triqui.turnoActual = 0; // Se establece el turno actual en 0 (jugador 1)
+        triqui.usuariosIngresados = true; 
+        triqui.juegoIniciado = false;
+        triqui.juegoPausado = false;
+        triqui.turnoActual = 0;
 
         inicializarTablero();
 
@@ -103,24 +109,35 @@ public class TriquiTaller {
         } else {
             System.out.println("Turno actual: " + triqui.jugador2 + " | Símbolo: " + triqui.simbolo2);
         }
-    }
+        mostrarTablero();
+    } 
 
     //Punto d.
-        public void modificarNombres(int numeroJugador, String nuevoNombre, char nuevoSimbolo) {
-            if (!triqui.usuariosIngresados) {
-                System.out.println("Primero debe ingresar los usuarios.");
-            } else if (numeroJugador == 1) {
-                triqui.jugador1 = nuevoNombre;
-                triqui.simbolo1 = nuevoSimbolo;
-                System.out.println("Jugador 1 actualizado correctamente.");
-            } else if (numeroJugador == 2) {
-                triqui.jugador2 = nuevoNombre;
-                triqui.simbolo2 = nuevoSimbolo;
-                System.out.println("Jugador 2 actualizado correctamente.");
-            } else {
-                System.out.println("Número de jugador inválido. Debe ser 1 o 2.");
-            }
+    public void modificarNombres(int numeroJugador, String nuevoNombre, char nuevoSimbolo) {
+        if (!triqui.usuariosIngresados) {
+            System.out.println("Primero debe ingresar los usuarios.");
+        } else if (numeroJugador == 1) {
+            char simboloAnterior = triqui.simbolo1;
+
+            triqui.jugador1 = nuevoNombre;
+            triqui.simbolo1 = nuevoSimbolo;
+
+            actualizarSimboloEnTablero(simboloAnterior, nuevoSimbolo);
+
+            System.out.println("Jugador 1 actualizado correctamente.");
+        } else if (numeroJugador == 2) {
+            char simboloAnterior = triqui.simbolo2;
+
+            triqui.jugador2 = nuevoNombre;
+            triqui.simbolo2 = nuevoSimbolo;
+
+            actualizarSimboloEnTablero(simboloAnterior, nuevoSimbolo);
+
+            System.out.println("Jugador 2 actualizado correctamente.");
+        } else {
+            System.out.println("Número de jugador inválido. Debe ser 1 o 2.");
         }
+    }
 
     //punto e.
     public void jugarTurno(int fila, int columna) {
@@ -207,7 +224,7 @@ public class TriquiTaller {
         }
     }
 
-    //punto h. (opcional)
+    //punto h.
     public boolean verificarGanador(char simbolo) {
         for (int i = 0; i < 3; i++) {
             if (triqui.tablero[i][0] == simbolo &&
@@ -262,5 +279,15 @@ public class TriquiTaller {
             }
         }
         return true; // El tablero está lleno, es empate
+    }
+    //Extra: Método para actualizar el símbolo en el tablero después de modificarlo
+    public void actualizarSimboloEnTablero(char simboloAnterior, char nuevoSimbolo) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (triqui.tablero[i][j] == simboloAnterior) {
+                    triqui.tablero[i][j] = nuevoSimbolo;
+                }
+            }
+        }
     }
 }

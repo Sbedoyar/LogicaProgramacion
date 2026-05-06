@@ -841,8 +841,11 @@ public class Main
                     exponente = input.nextInt();
                     input.nextLine();
 
-                    polinomioAgregar.addTermOrdered(coeficiente, exponente);
-                    System.out.println("Término agregado conservando el orden.");
+                    boolean agregado = polinomioAgregar.addTermOrdered(coeficiente, exponente);
+
+                    if (agregado) {
+                        System.out.println("Término agregado conservando el orden.");
+                    }
                     break;
                 case "8":
                     if (f.getHead() == null && g.getHead() == null) {
@@ -933,18 +936,25 @@ public class Main
                     System.out.print("Ingrese nombre del jugador 1: ");
                     jugador1 = input.nextLine();
 
+                    do {
+                        System.out.print("Ingrese nombre del jugador 2: ");
+                        jugador2 = input.nextLine();
+
+                        if (jugador1.equalsIgnoreCase(jugador2)) {
+                            System.out.println("Los jugadores no pueden tener el mismo nombre. Ingrese otro nombre para el jugador 2.");
+                        }
+
+                    } while (jugador1.equalsIgnoreCase(jugador2));
+
                     System.out.print("Ingrese símbolo del jugador 1: ");
                     simbolo1 = input.nextLine().charAt(0);
-
-                    System.out.print("Ingrese nombre del jugador 2: ");
-                    jugador2 = input.nextLine();
 
                     do {
                         System.out.print("Ingrese símbolo del jugador 2: ");
                         simbolo2 = input.nextLine().charAt(0);
 
                         if (simbolo1 == simbolo2) {
-                            System.out.println("Los símbolos no pueden ser iguales. Por favor, ingrese un símbolo diferente para el jugador 2.");
+                            System.out.println("Los símbolos no pueden ser iguales. Ingrese un símbolo diferente para el jugador 2.");
                         }
 
                     } while (simbolo2 == simbolo1);
@@ -965,6 +975,7 @@ public class Main
                         System.out.println("Primero debe ingresar los usuarios.");
                         break;
                     }
+
                     System.out.println();
                     System.out.println("¿Qué jugador desea modificar?");
                     System.out.println("1. Jugador 1: " + juego.triqui.jugador1);
@@ -978,8 +989,20 @@ public class Main
                         break;
                     }
 
-                    System.out.print("Ingrese el nuevo nombre del jugador " + numeroJugador + ": ");
-                    String nuevoNombre = input.nextLine();
+                    String nuevoNombre;
+
+                    do {
+                        System.out.print("Ingrese el nuevo nombre del jugador " + numeroJugador + ": ");
+                        nuevoNombre = input.nextLine();
+
+                        if (numeroJugador == 1 && nuevoNombre.equalsIgnoreCase(juego.triqui.jugador2)) {
+                            System.out.println("El nombre no puede ser igual al del jugador 2. Ingrese otro nombre.");
+                        } else if (numeroJugador == 2 && nuevoNombre.equalsIgnoreCase(juego.triqui.jugador1)) {
+                            System.out.println("El nombre no puede ser igual al del jugador 1. Ingrese otro nombre.");
+                        }
+
+                    } while ((numeroJugador == 1 && nuevoNombre.equalsIgnoreCase(juego.triqui.jugador2)) ||
+                            (numeroJugador == 2 && nuevoNombre.equalsIgnoreCase(juego.triqui.jugador1)));
 
                     char nuevoSimbolo;
 
@@ -989,16 +1012,15 @@ public class Main
 
                         if (numeroJugador == 1 && nuevoSimbolo == juego.triqui.simbolo2) {
                             System.out.println("El símbolo no puede ser igual al del jugador 2. Por favor, ingrese un símbolo diferente.");
-                        } else if (numeroJugador ==2 && nuevoSimbolo == juego.triqui.simbolo1) {
+                        } else if (numeroJugador == 2 && nuevoSimbolo == juego.triqui.simbolo1) {
                             System.out.println("El símbolo no puede ser igual al del jugador 1. Por favor, ingrese un símbolo diferente.");
                         }
 
-                    } while ((numeroJugador == 1 && nuevoSimbolo == juego.triqui.simbolo2) || (numeroJugador == 2 && nuevoSimbolo == juego.triqui.simbolo1));
+                    } while ((numeroJugador == 1 && nuevoSimbolo == juego.triqui.simbolo2) ||
+                            (numeroJugador == 2 && nuevoSimbolo == juego.triqui.simbolo1));
 
                     juego.modificarNombres(numeroJugador, nuevoNombre, nuevoSimbolo);
-                    
                     break;
-
                 case "5":
                     if (!juego.triqui.usuariosIngresados) {
                         System.out.println("Primero debe ingresar los usuarios.");
